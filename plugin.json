@@ -1,7 +1,7 @@
 {
   "name": "web2skill",
   "displayName": "web2skill",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zero-dependency conversational meta-skill that explores any live web app, product UI, or docs URL, runs a supervised dry-run to capture failure scars, and compiles a portable SKILL.md.",
   "logo": "assets/logo.svg",
   "author": {

@@ -13,6 +13,8 @@ description: >-
 
 # <App Name> — <Workflow Title>
 
+> Verified On: <YYYY-MM-DD> against live <App Name> (<plan/tier>).
+
 ## Entry Routes & Parameter Locks
 
 - **Direct Entry URL:** `https://<app-domain>/<direct-workspace-path>` (skip marketing root)
@@ -50,4 +52,9 @@ description: >-
 Never trust a button click alone. Confirm all post-conditions:
 - [ ] **UI / Host Receipt:** Visible `<confirmation ID / published badge / URL slug>` confirmed in live browser state.
 - [ ] **Artifact Integrity (if files downloaded):** Verify file exists on disk, size `> 0` bytes, and `<ffprobe / JSON parse / row count check>` matches expected spec.
+
+## Progressive References
+
+Move volatile model/credit tables, filter lists, and full menus out of `SKILL.md`:
+- [ui-controls-and-credits.md](./references/ui-controls-and-credits.md) — Verified model options, credit costs, and detailed UI menus.
 ````

@@ -19,11 +19,11 @@ Turn unfamiliar web applications, SaaS dashboards, or documentation URLs into le
 Before scraping pages or opening a browser, run three fast checks:
 
 1. **One-Off vs. Repeatable Check:** If the user only wants a single task performed once, tell them in one sentence that zero-shot execution is faster than maintaining a skill, and confirm they actually want a saved `SKILL.md`.
-2. **Local Inventory Check:** Check already-installed workspace/global skills and MCP servers so you never duplicate an existing integration or CLI.
-3. **Origin Discovery Check:** Given target URL `https://<host>/...`, probe in order:
+2. **Local Inventory Check:** Check already-installed workspace/global skills and MCP servers so you never duplicate an existing integration or CLI. If a stale or doc-scraped skill already exists for the same product, show its gaps and ask whether to harden it in place or emit a clean replacement under a distinct slug (flagging the old one to prevent trigger collisions).
+3. **Origin Discovery Check:** Given target URL `https://<host>/...`, probe in order (using the browser or web search rather than shell `curl` on live web-app hosts in browser-subagent harnesses):
    - `https://<host>/.well-known/skills/` and `https://<host>/skill.md`
    - `https://<host>/llms.txt` and `https://<host>/llms-full.txt`
-   If an official `skill.md` already exists, show the user what it covers (or offer `npx skills add https://<host>`) and only author a custom skill if they need custom workflows, UI automation, or local guardrails on top of it.
+   Verify real `text/markdown` or `text/plain` content—SPAs often return HTTP 200 HTML soft-404 pages. If an official `skill.md` already exists, show the user what it covers (or offer `npx skills add https://<host>`) and only author a custom skill if they need custom workflows, UI automation, or local guardrails on top of it.
 
 ---
 
@@ -63,15 +63,15 @@ Use when an agent must operate a visual web product (e.g., Google Flow, YouTube 
 
 Unverified skills hallucinate steps. Before finalizing the skill:
 
-1. **Run 1 Bounded Dry-Run:** Walk through one real read-only or draft task (halting **before** final payment, publish, or destructive submit) while the user supervises.
-2. **Capture Failure Scars:** Every real-world snag discovered during the dry-run—promo modals blocking clicks, SPA tabs that lazy-load, downloads landing in a sandbox directory, or silent thumbnail exports instead of full media—must be written directly into `## Failure Scars & Guardrails`.
+1. **Run 1 Bounded Dry-Run:** Walk through one real read-only or draft task while the user supervises—halting **before** final payment, publish, destructive submit, or credit-consuming actions (`Generate`, `Upscale`, `Run`, `Send`) so dry-runs on metered AI/SaaS apps spend zero credits.
+2. **Capture Failure Scars:** Run a 4-point scar probe—*(a)* intercepted clicks/hovers (`no_own_hit_point` / overlays), *(b)* strict-mode locator collisions, *(c)* silent resets or sticky multipliers across mode/tab switches, and *(d)* non-standard modal/submenu `Escape` dismissal—and write every real-world snag (promo modals, lazy tabs, sandbox downloads, silent preview stubs) directly into `## Failure Scars & Guardrails`.
 3. **Encode Deterministic Post-Checks:** Add concrete verification steps under `## Verification` (e.g., checking DOM confirmation state, HTTP/CLI exit codes, file non-zero byte size, or `ffprobe`/schema validation on exported artifacts) so future runs never claim success on a silent failure.
 
 ---
 
 ## Stage 4: Anti-Bloat Audit & Emit Package
 
-Write the skill directory and verify all **6 quality gates** before finishing:
+Write the skill directory and verify all **7 quality gates** before finishing:
 
 1. **Strict Trigger Hygiene:** YAML `name` matches `<slug>` (lowercase, hyphenated). `description` uses third-person, states exact trigger conditions, and ends with explicit `Don't use for...` exclusions so the skill never hijacks unrelated tasks.
 2. **Progressive Disclosure:** `SKILL.md` is **under 250 lines** (hard ceiling: 500 lines). Deep tables or harness-specific reference notes live in `references/`.
@@ -79,3 +79,4 @@ Write the skill directory and verify all **6 quality gates** before finishing:
 4. **Zero Secrets:** Never write API keys, session cookies, personal tokens, or private account passwords into `SKILL.md` or `references/`.
 5. **Explicit Safety & Auth Boundaries:** Login, CAPTCHA, and payment/destructive confirmation gates are explicitly marked **PAUSE FOR USER**.
 6. **Cross-Harness Portability:** Save to the requested path (default workspace `.agents/skills/<slug>/SKILL.md`; symlink `.claude/skills/<slug>` when requested; see [harness-adapters.md](./references/harness-adapters.md)) and report the exact file links created.
+7. **Provenance & Trigger Sanity Check:** Stamp `Verified On: YYYY-MM-DD` on volatile SaaS UI skills, move fast-changing model/pricing tables to `references/`, and mentally sanity-check 2 positive + 2 negative prompts against `description` (and neighboring installed skills) to prevent over-triggering.
