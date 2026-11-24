@@ -1,0 +1,21 @@
+{
+  "name": "web2skill",
+  "displayName": "web2skill",
+  "version": "0.1.0",
+  "description": "Zero-dependency conversational meta-skill that explores any live web app, product UI, or docs URL, runs a supervised dry-run to capture failure scars, and compiles a portable SKILL.md.",
+  "logo": "assets/logo.svg",
+  "author": {
+    "name": "VAMFI Inc.",
+    "url": "https://github.com/VAMFI"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VAMFI/web2skill"
+  },
+  "homepage": "https://github.com/VAMFI/web2skill",
+  "suggestedPrompts": [
+    "Build a reusable skill for operating a web app from its URL with a supervised dry-run",
+    "Convert a product documentation or how-to guide URL into a lean SKILL.md package",
+    "Harden an existing web workflow skill with failure scars, auth pause gates, and verification checks"
+  ]
+}
